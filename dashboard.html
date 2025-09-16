@@ -1,1 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureHome Dashboard - Reverse Mortgage Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            color: white;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #667eea;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dashboard Content */
+        .hidden {
+            display: none !important;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card p {
+            color: #666;
+            margin: 0.5rem 0;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45ff, #ff6b6b, #ffa726);
+        }
+
+        .btn-logout {
+            background: linear-gradient(45deg, #e57373, #f06292);
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 2rem 1rem;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">🏠 SecureHome</a>
+            <div>
+                <span id="userGreeting" style="margin-right: 1rem;">Loading...</span>
+                <button onclick="logout()" class="btn btn-logout">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Loading State -->
+        <div id="loadingState" class="dashboard-container loading">
+            <div class="spinner"></div>
+            <h2>Authenticating...</h2>
+            <p>Please wait while we verify your login and prepare your dashboard.</p>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboardContent" class="hidden">
+            <div class="dashboard-container">
+                <div class="welcome-section">
+                    <h1 class="welcome-title">Welcome Back!</h1>
+                    <p class="welcome-subtitle">Your secure reverse mortgage portal</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- User Information Card -->
+                    <div class="info-card">
+                        <h3>👤 Account Information</h3>
+                        <div id="userDetails">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Login Details Card -->
+                    <div class="info-card">
+                        <h3>🔐 Login Details</h3>
+                        <div id="loginDetails">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Application Status Card -->
+                    <div class="info-card">
+                        <h3>📋 Application Status</h3>
+                        <p><strong>Status:</strong> <span style="color: #2e7d32;">Active</span></p>
+                        <p><strong>Application ID:</strong> RM-2025-001</p>
+                        <p><strong>Next Step:</strong> Document review</p>
+                        <p><strong>Estimated Value:</strong> $425,000</p>
+                    </div>
+
+                    <!-- Quick Links Card -->
+                    <div class="info-card">
+                        <h3>⚡ Quick Actions</h3>
+                        <p>• Upload documents</p>
+                        <p>• Schedule consultation</p>
+                        <p>• Review loan terms</p>
+                        <p>• Contact support</p>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <a href="#" class="btn">View Application</a>
+                    <a href="#" class="btn">Upload Documents</a>
+                    <a href="#" class="btn btn-secondary">Schedule Call</a>
+                    <a href="index.html" class="btn">Back to Home</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="dashboard-container hidden">
+            <div class="error-container">
+                <div class="error-icon">⚠️</div>
+                <h2>Authentication Error</h2>
+                <div id="errorMessage">
+                    <!-- Error details will be populated here -->
+                </div>
+                <div style="margin-top: 2rem;">
+                    <a href="index.html" class="btn">Return to Home</a>
+                    <button onclick="retryLogin()" class="btn btn-secondary">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================
+        // AUTH0 CONFIGURATION
+        // ==========================================
+        // REPLACE THESE WITH YOUR ACTUAL AUTH0 VALUES
+        const AUTH0_DOMAIN = 'dev-33kbhhk62a0lfqfo.us.auth0.com';
+        const AUTH0_CLIENT_ID = 'sxrFfvn0PdC9z20kj6FIvb5kKeNOCp5Y';
+
+        // ==========================================
+        // AUTHENTICATION HANDLER
+        // ==========================================
+        class AuthHandler {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                // Check if this is a callback from Auth0
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get('code');
+                const error = urlParams.get('error');
+                const errorDescription = urlParams.get('error_description');
+
+                if (error) {
+                    this.showError(error, errorDescription);
+                } else if (code) {
+                    this.handleAuthCode(code);
+                } else {
+                    // No auth code - redirect to login
+                    this.redirectToLogin();
+                }
+            }
+
+            async handleAuthCode(code) {
+                try {
+                    // Simulate processing time
+                    await this.delay(2000);
+
+                    // In production, you would:
+                    // 1. Send code to your backend
+                    // 2. Backend exchanges code for tokens with Auth0
+                    // 3. Backend validates tokens and returns user info
+                    // 4. Store tokens securely
+
+                    // For demo purposes, create mock user data
+                    const userData = {
+                        id: 'user_123456',
+                        name: 'John Doe',
+                        email: 'john.doe@example.com',
+                        picture: 'https://via.placeholder.com/100x100?text=JD',
+                        loginTime: new Date().toLocaleString(),
+                        authCode: code.substring(0, 10) + '...',
+                        lastLogin: new Date(Date.now() - 86400000).toLocaleDateString() // Yesterday
+                    };
+
+                    this.showDashboard(userData);
+
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+
+                } catch (error) {
+                    this.showError('Processing Error', 'Failed to process authentication');
+                }
+            }
+
+            showDashboard(userData) {
+                // Hide loading, show dashboard
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('dashboardContent').classList.remove('hidden');
+
+                // Update user greeting
+                document.getElementById('userGreeting').textContent = `Hello, ${userData.name.split(' ')[0]}!`;
+
+                // Populate user details
+                document.getElementById('userDetails').innerHTML = `
+                    <p><strong>Name:</strong> ${userData.name}</p>
+                    <p><strong>Email:</strong> ${userData.email}</p>
+                    <p><strong>User ID:</strong> ${userData.id}</p>
+                    <p><strong>Member Since:</strong> January 2025</p>
+                `;
+
+                // Populate login details
+                document.getElementById('loginDetails').innerHTML = `
+                    <p><strong>Login Time:</strong> ${userData.loginTime}</p>
+                    <p><strong>Last Login:</strong> ${userData.lastLogin}</p>
+                    <p><strong>Session:</strong> Active</p>
+                    <p><strong>Security:</strong> ✅ Verified</p>
+                `;
+
+                // Store user data for logout
+                sessionStorage.setItem('userData', JSON.stringify(userData));
+            }
+
+            showError(error, description) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('errorState').classList.remove('hidden');
+                
+                document.getElementById('errorMessage').innerHTML = `
+                    <p><strong>Error:</strong> ${error}</p>
+                    ${description ? `<p><strong>Description:</strong> ${description}</p>` : ''}
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                        If this problem persists, please contact support.
+                    </p>
+                `;
+            }
+
+            redirectToLogin() {
+                // If no auth code and no error, redirect to login
+                const redirectUri = window.location.origin + window.location.pathname;
+                const loginUrl = `https://${AUTH0_DOMAIN}/authorize?` +
+                    `response_type=code&` +
+                    `client_id=${AUTH0_CLIENT_ID}&` +
+                    `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+                    `scope=openid%20profile%20email&` +
+                    `state=${this.generateState()}`;
+
+                window.location.href = loginUrl;
+            }
+
+            generateState() {
+                // Generate random state for security
+                return Math.random().toString(36).substring(2, 15) + 
+                       Math.random().toString(36).substring(2, 15);
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // ==========================================
+        // LOGOUT FUNCTION
+        // ==========================================
+        function logout() {
+            // Clear session data
+            sessionStorage.removeItem('userData');
+            
+            // Redirect to Auth0 logout
+            const returnTo = encodeURIComponent(window.location.origin + '/index.html');
+            const logoutUrl = `https://${AUTH0_DOMAIN}/v2/logout?` +
+                `client_id=${AUTH0_CLIENT_ID}&` +
+                `returnTo=${returnTo}`;
+            
+            window.location.href = logoutUrl;
+        }
+
+        // ==========================================
+        // RETRY LOGIN FUNCTION
+        // ==========================================
+        function retryLogin() {
+            window.location.href = 'index.html';
+        }
+
+        // ==========================================
+        // INITIALIZE APP
+        // ==========================================
+        // Start the authentication process when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            new AuthHandler();
+        });
+
+        // ==========================================
+        // SECURITY: Prevent back button after logout
+        // ==========================================
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>
