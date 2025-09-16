@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -283,7 +283,7 @@
         // ==========================================
         // AUTH0 CONFIGURATION
         // ==========================================
-        // Your actual Auth0 values (from your setup)
+        // Your actual Auth0 values
         const AUTH0_DOMAIN = 'dev-33kbhhk62a0lfqfo.us.auth0.com';
         const AUTH0_CLIENT_ID = 'sxrFfvn0PdC9z20kj6FIvb5kKeNOCp5Y';
 
@@ -387,7 +387,7 @@
 
             redirectToLogin() {
                 // If no auth code and no error, redirect to login
-                const redirectUri = window.location.origin + window.location.pathname;
+                const redirectUri = 'https://moomreverse.github.io/reverse-mortgage-landing/dashboard.html';
                 const loginUrl = `https://${AUTH0_DOMAIN}/authorize?` +
                     `response_type=code&` +
                     `client_id=${AUTH0_CLIENT_ID}&` +
@@ -417,7 +417,7 @@
             sessionStorage.removeItem('userData');
             
             // Redirect to Auth0 logout
-            const returnTo = encodeURIComponent(window.location.origin + '/index.html');
+            const returnTo = encodeURIComponent('https://moomreverse.github.io/reverse-mortgage-landing/');
             const logoutUrl = `https://${AUTH0_DOMAIN}/v2/logout?` +
                 `client_id=${AUTH0_CLIENT_ID}&` +
                 `returnTo=${returnTo}`;
