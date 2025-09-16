@@ -434,19 +434,48 @@
 
     <script>
         function redirectToAuth0() {
-            // Replace with your actual Auth0 domain and client ID
+            // Your actual Auth0 values (from the popup message)
             const auth0Domain = 'dev-33kbhhk62a0lfqfo.us.auth0.com';
-            const clientId = 'sxrFfvn0PdC9z20kj6FIvb5kKeNOCp5Y';
-            const redirectUri = encodeURIComponent(window.location.origin + '/dashboard');
+            const clientId = 'sxrFtvn0PdC9z20k|6FivbSkKeNOCp5Y';
+            const redirectUri = encodeURIComponent(window.location.origin + '/dashboard.html');
             
             // Construct Auth0 login URL
-            const auth0Url = `https://${auth0Domain}/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid%20profile%20email`;
+            const auth0Url = `https://${auth0Domain}/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=openid%20profile%20email&state=${generateRandomString()}`;
             
-            // For demo purposes, show alert with the URL that would be used
-            alert(`Would redirect to Auth0: ${auth0Url}`);
+            // Actually redirect to Auth0 (removed demo alert)
+            window.location.href = auth0Url;
+        }
+        
+        // Generate random string for security
+        function generateRandomString() {
+            const array = new Uint32Array(28);
+            window.crypto.getRandomValues(array);
+            return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+        }
+        
+        // Handle Auth0 callback
+        function handleAuth0Callback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
             
-            // Uncomment the line below to actually redirect to Auth0
-            // window.location.href = auth0Url;
+            if (error) {
+                console.error('Auth0 Error:', error);
+                alert('Login failed: ' + error);
+                return;
+            }
+            
+            if (code) {
+                // In a real app, you'd exchange the code for tokens on your backend
+                console.log('Authorization code received:', code);
+                // For now, just show success message
+                document.body.innerHTML = '<div style="text-align: center; padding: 50px;"><h1>Login Successful!</h1><p>Welcome to your dashboard.</p></div>';
+            }
+        }
+        
+        // Check if this is a callback from Auth0
+        if (window.location.search.includes('code=') || window.location.search.includes('error=')) {
+            handleAuth0Callback();
         }
 
         // Smooth scrolling for anchor links
