@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Your Application - Mutual of Omaha Reverse Mortgage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #1e4a72;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .left-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .left-section h1 {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .quote-section {
+            background: #f8f9fa;
+            border-left: 4px solid #1e4a72;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        .loan-officers {
+            margin-top: 2rem;
+        }
+
+        .loan-officer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .loan-officer:last-child {
+            border-bottom: none;
+        }
+
+        .officer-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #1e4a72, #2a5c8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .officer-info h3 {
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .officer-info .title {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .officer-info .contact {
+            font-size: 0.9rem;
+            color: #1e4a72;
+        }
+
+        .officer-info .contact a {
+            color: #1e4a72;
+            text-decoration: none;
+        }
+
+        .right-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .right-section h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        label .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1e4a72;
+            box-shadow: 0 0 0 3px rgba(30, 74, 114, 0.1);
+        }
+
+        .phone-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .country-code {
+            width: 70px;
+            padding: 0.8rem 0.5rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .country-code:focus {
+            outline: none;
+            border-color: #1e4a72;
+            box-shadow: 0 0 0 3px rgba(30, 74, 114, 0.1);
+        }
+
+        .phone-number {
+            flex: 1;
+        }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .password-requirements div {
+            margin: 0.2rem 0;
+        }
+
+        .phone-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin: 2rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 0.2rem;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            line-height: 1.5;
+            font-weight: normal;
+        }
+
+        .checkbox-group a {
+            color: #1e4a72;
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #1e4a72;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #2a5c8a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 74, 114, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .back-btn {
+            width: 100%;
+            background: transparent;
+            color: #666;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            border-color: #1e4a72;
+            color: #1e4a72;
+            box-shadow: 0 2px 8px rgba(30, 74, 114, 0.1);
+        }
+
+        .login-link {
+            text-align: center;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #1e4a72;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 968px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .left-section,
+            .right-section {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-right {
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .left-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .right-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">🏛️ Mutual of Omaha Reverse Mortgage</a>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <span style="color: white; opacity: 0.8;">English</span>
+                    <a href="#" class="nav-link">About</a>
+                    <a href="#" class="nav-link">Contact Us</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="left-section">
+            <h1>Start your application with Mutual of Omaha</h1>
+            
+            <h2>Just sign up to create an account, and you'll be ready to start your application!</h2>
+
+            <form id="applicationForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" value="" placeholder="your.email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone <span class="required">*</span></label>
+                    <div class="phone-input">
+                        <select class="country-code">
+                            <option value="+1">+1</option>
+                        </select>
+                        <input type="tel" id="phone" name="phone" class="phone-number" placeholder="123-456-7890" required>
+                    </div>
+                    <div class="phone-note">You can change your phone number after creating your account.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="password-requirements">
+                        <div>✓ 8 or more characters</div>
+                        <div>✓ 1 uppercase and 1 lowercase letter</div>
+                        <div>✓ 1 number and 1 special character</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">
+                        I understand and agree with the <a href="#" target="_blank">Terms of Use</a>, 
+                        <a href="#" target="_blank">Privacy Policy</a>, 
+                        <a href="#" target="_blank">SMS Policy</a> and 
+                        <a href="#" target="_blank">eConsent Policy</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit</button>
+                <button type="button" class="back-btn" onclick="goBack()">Back</button>
+                
+                <div class="login-link">
+                    Already registered? <a href="#" onclick="showLogin()">Login</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="right-section">
+            <h1>Meet Your Mutual of Omaha Team</h1>
+            
+            <div class="quote-section">
+                "We're here to help you unlock your home's potential and secure your retirement dreams."
+            </div>
+
+            <div class="loan-officers">
+                <div class="loan-officer">
+                    <div class="officer-photo">MR</div>
+                    <div class="officer-info">
+                        <h3>Michael Rodriguez</h3>
+                        <div class="title">Senior Loan Officer • NMLS #8765432</div>
+                        <div class="contact">
+                            📧 <a href="mailto:mrodriguez@mutualmortgage.com">mrodriguez@mutualmortgage.com</a><br>
+                            📞 <a href="tel:855-742-8901">(855) 742-8901</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loan-officer">
+                    <div class="officer-photo">JT</div>
+                    <div class="officer-info">
+                        <h3>Jennifer Thompson</h3>
+                        <div class="title">Reverse Mortgage Consultant</div>
+                        <div class="contact">
+                            📧 <a href="mailto:jthompson@mutualmortgage.com">jthompson@mutualmortgage.com</a><br>
+                            📞 <a href="tel:855-742-8902">(855) 742-8902</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // AUTH0 CONFIGURATION
+        // ==========================================
+        const AUTH0_DOMAIN = 'dev-33kbhhk62a0lfqfo.us.auth0.com';
+        const AUTH0_CLIENT_ID = 'sxrFfvn0PdC9z20kj6FIvb5kKeNOCp5Y';
+
+        // ==========================================
+        // AUTH0 CALLBACK HANDLER
+        // ==========================================
+        class AuthHandler {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                // Check if this is a callback from Auth0
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get('code');
+                const error = urlParams.get('error');
+                const errorDescription = urlParams.get('error_description');
+
+                if (error) {
+                    this.showError(error, errorDescription);
+                } else if (code) {
+                    this.handleAuthCode(code);
+                } else {
+                    // No auth code - user might have accessed directly, show form
+                    this.showApplicationForm();
+                }
+            }
+
+            async handleAuthCode(code) {
+                try {
+                    // Show loading state
+                    this.showLoading();
+
+                    // Simulate processing time
+                    await this.delay(2000);
+
+                    // In production, you would:
+                    // 1. Send code to your backend
+                    // 2. Backend exchanges code for tokens with Auth0
+                    // 3. Backend validates tokens and returns user info
+                    // 4. Store tokens securely
+
+                    // For demo purposes, create mock user data
+                    const userData = {
+                        id: 'user_123456',
+                        name: 'John Doe',
+                        email: 'john.doe@example.com',
+                        picture: 'https://via.placeholder.com/100x100?text=JD',
+                        loginTime: new Date().toLocaleString(),
+                        authCode: code.substring(0, 10) + '...'
+                    };
+
+                    this.showApplicationForm(userData);
+
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+
+                } catch (error) {
+                    this.showError('Processing Error', 'Failed to process authentication');
+                }
+            }
+
+            showLoading() {
+                document.body.innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #f8f9fa;">
+                        <div style="background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+                            <div style="border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #1e4a72; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                            <h2 style="color: #333; margin-bottom: 0.5rem;">Processing your login...</h2>
+                            <p style="color: #666;">Please wait while we prepare your application.</p>
+                        </div>
+                        <style>
+                            @keyframes spin {
+                                0% { transform: rotate(0deg); }
+                                100% { transform: rotate(360deg); }
+                            }
+                        </style>
+                    </div>
+                `;
+            }
+
+            showApplicationForm(userData = null) {
+                // Store user data for pre-population
+                if (userData) {
+                    sessionStorage.setItem('userData', JSON.stringify(userData));
+                }
+
+                // Page is already loaded with form, just pre-populate if needed
+                this.prePopulateForm(userData);
+            }
+
+            prePopulateForm(userData) {
+                if (userData) {
+                    // Pre-populate email
+                    const emailField = document.getElementById('email');
+                    if (emailField && userData.email) {
+                        emailField.value = userData.email;
+                    }
+
+                    // Pre-populate name fields
+                    if (userData.name) {
+                        const names = userData.name.split(' ');
+                        const firstNameField = document.getElementById('firstName');
+                        const lastNameField = document.getElementById('lastName');
+                        
+                        if (firstNameField && names.length >= 1) {
+                            firstNameField.value = names[0];
+                        }
+                        if (lastNameField && names.length >= 2) {
+                            lastNameField.value = names[names.length - 1];
+                        }
+                    }
+                }
+            }
+
+            showError(error, description) {
+                document.body.innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #f8f9fa;">
+                        <div style="background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; max-width: 500px;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                            <h2 style="color: #d32f2f; margin-bottom: 1rem;">Authentication Error</h2>
+                            <p style="color: #666; margin-bottom: 0.5rem;"><strong>Error:</strong> ${error}</p>
+                            ${description ? `<p style="color: #666; margin-bottom: 2rem;"><strong>Description:</strong> ${description}</p>` : ''}
+                            <div style="display: flex; gap: 1rem; justify-content: center;">
+                                <a href="index.html" style="background: #1e4a72; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Return to Home</a>
+                                <button onclick="retryLogin()" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Try Again</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // ==========================================
+        // INITIALIZE AUTH HANDLER
+        // ==========================================
+        let authHandler;
+        document.addEventListener('DOMContentLoaded', function() {
+            authHandler = new AuthHandler();
+        });
+
+        // ==========================================
+        // EXISTING FORM FUNCTIONALITY
+        // ==========================================
+        
+        // Pre-populate email if user data is available from Auth0
+        window.addEventListener('DOMContentLoaded', function() {
+            const userData = sessionStorage.getItem('userData');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    if (user.email) {
+                        document.getElementById('email').value = user.email;
+                    }
+                    if (user.name) {
+                        const names = user.name.split(' ');
+                        if (names.length >= 1) document.getElementById('firstName').value = names[0];
+                        if (names.length >= 2) document.getElementById('lastName').value = names[names.length - 1];
+                    }
+                } catch (e) {
+                    console.log('Could not parse user data');
+                }
+            }
+        });
+
+        // Form validation
+        document.getElementById('applicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validate password match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please try again.');
+                return;
+            }
+            
+            // Validate password requirements
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert('Password must meet all requirements: 8+ characters, uppercase, lowercase, number, and special character.');
+                return;
+            }
+            
+            // Validate terms checkbox
+            if (!document.getElementById('terms').checked) {
+                alert('Please agree to the terms and conditions to continue.');
+                return;
+            }
+            
+            // Show success and redirect
+            alert('Application submitted successfully! You will be contacted by one of our loan officers within 24 hours.');
+            
+            // In a real application, you would send this data to your backend
+            console.log('Form submitted with data:', new FormData(this));
+            
+            // Redirect to a thank you page or dashboard
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        });
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{3})/, '$1-$2');
+            }
+            e.target.value = value;
+        });
+
+        // Password validation visual feedback
+        document.getElementById('password').addEventListener('input', function(e) {
+            const password = e.target.value;
+            const requirements = document.querySelectorAll('.password-requirements div');
+            
+            // Length check
+            requirements[0].style.color = password.length >= 8 ? 'green' : '#666';
+            
+            // Case check
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            requirements[1].style.color = (hasUpper && hasLower) ? 'green' : '#666';
+            
+            // Number and special char check
+            const hasNumber = /\d/.test(password);
+            const hasSpecial = /[@$!%*?&]/.test(password);
+            requirements[2].style.color = (hasNumber && hasSpecial) ? 'green' : '#666';
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function showLogin() {
+            // Redirect to login or show login modal
+            window.location.href = 'index.html';
+        }
+
+        function retryLogin() {
+            window.location.href = 'index.html';
+        }
+
+        // Enable/disable submit button based on form validity
+        function validateForm() {
+            const form = document.getElementById('applicationForm');
+            const submitBtn = document.querySelector('.submit-btn');
+            if (form && submitBtn) {
+                const isValid = form.checkValidity() && document.getElementById('terms').checked;
+                submitBtn.disabled = !isValid;
+            }
+        }
+
+        // Add event listeners to form inputs
+        document.querySelectorAll('#applicationForm input').forEach(input => {
+            input.addEventListener('input', validateForm);
+            input.addEventListener('change', validateForm);
+        });
+
+        // Initial validation
+        setTimeout(validateForm, 100);
+    </script>
+</body>
+</html>
