@@ -662,15 +662,32 @@
                         status: 'submitted'
                     };
                     
-                    // Store application data
+                    // Store application data locally
                     sessionStorage.setItem('applicationData', JSON.stringify(applicationData));
                     
                     // Get user data for Auth0 user ID
                     const userData = JSON.parse(sessionStorage.getItem('userData'));
                     
+                    if (!userData || !userData.id) {
+                        alert('User session not found. Please log in again.');
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    
                     // Submit to backend API
                     try {
-                        const response = await fetch('/api/submit-application', {
+                        // Show loading state
+                        const submitBtn = document.querySelector('.submit-btn');
+                        const originalText = submitBtn.textContent;
+                        submitBtn.textContent = 'Submitting...';
+                        submitBtn.disabled = true;
+                        
+                        // Replace with your actual backend URL
+                        // For local testing: 'http://localhost:3000/api/submit-application'
+                        // For production: 'https://your-deployed-api.vercel.app/api/submit-application'
+                        const API_URL = 'http://localhost:3000/api/submit-application';
+                        
+                        const response = await fetch(API_URL, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -683,22 +700,40 @@
                         
                         const result = await response.json();
                         
-                        if (result.success) {
+                        // Reset button state
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        
+                        if (response.ok && result.success) {
                             alert('Application submitted successfully! You will be contacted by one of our loan officers within 24 hours.');
                             console.log('Application saved to Auth0:', result);
+                            
+                            // Redirect after successful submission
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 2000);
                         } else {
-                            throw new Error(result.error || 'Failed to submit application');
+                            throw new Error(result.error || `Server error: ${response.status}`);
                         }
                         
                     } catch (error) {
-                        alert('Error submitting application. Please try again.');
+                        // Reset button state on error
+                        const submitBtn = document.querySelector('.submit-btn');
+                        submitBtn.textContent = 'Submit';
+                        submitBtn.disabled = false;
+                        
                         console.error('Submission error:', error);
+                        
+                        // Handle different types of errors
+                        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                            alert('Cannot connect to server. Please check if the backend API is running and try again.');
+                        } else if (error.message.includes('404')) {
+                            alert('API endpoint not found. Please check the backend configuration.');
+                        } else {
+                            alert('Error submitting application: ' + error.message + '. Please try again.');
+                        }
                         return;
                     }
-                    
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 2000);
                 });
             }
 
