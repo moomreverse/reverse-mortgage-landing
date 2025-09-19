@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Your Application - Mutual of Omaha Reverse Mortgage</title>
+    
+    <!-- Conversational Messenger CSS -->
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #1e4a72;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 1;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .left-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .left-section h1 {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 2rem;
+            line-height: 1.3;
+        }
+
+        .quote-section {
+            background: #f8f9fa;
+            border-left: 4px solid #1e4a72;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        .loan-officers {
+            margin-top: 2rem;
+        }
+
+        .loan-officer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .loan-officer:last-child {
+            border-bottom: none;
+        }
+
+        .officer-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #1e4a72, #2a5c8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .officer-info h3 {
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .officer-info .title {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .officer-info .contact {
+            font-size: 0.9rem;
+            color: #1e4a72;
+        }
+
+        .officer-info .contact a {
+            color: #1e4a72;
+            text-decoration: none;
+        }
+
+        .right-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .right-section h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        label .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1e4a72;
+            box-shadow: 0 0 0 3px rgba(30, 74, 114, 0.1);
+        }
+
+        .phone-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .country-code {
+            width: 70px;
+            padding: 0.8rem 0.5rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        .country-code:focus {
+            outline: none;
+            border-color: #1e4a72;
+            box-shadow: 0 0 0 3px rgba(30, 74, 114, 0.1);
+        }
+
+        .phone-number {
+            flex: 1;
+        }
+
+        .password-requirements {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .password-requirements div {
+            margin: 0.2rem 0;
+        }
+
+        .phone-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin: 2rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 0.2rem;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            line-height: 1.5;
+            font-weight: normal;
+        }
+
+        .checkbox-group a {
+            color: #1e4a72;
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #1e4a72;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #2a5c8a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 74, 114, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .back-btn {
+            width: 100%;
+            background: transparent;
+            color: #666;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            border-color: #1e4a72;
+            color: #1e4a72;
+            box-shadow: 0 2px 8px rgba(30, 74, 114, 0.1);
+        }
+
+        .login-link {
+            text-align: center;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #1e4a72;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Official Conversational Messenger Styling - Final Version */
+        df-messenger {
+            z-index: 99999 !important;
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            --df-messenger-font-color: #000;
+            --df-messenger-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --df-messenger-chat-background: #f3f6fc;
+            --df-messenger-message-user-background: #1e4a72;
+            --df-messenger-message-bot-background: #fff;
+            --df-messenger-button-titlebar-color: #1e4a72;
+            --df-messenger-chat-bubble-background: #1e4a72;
+        }
+
+        /* Style the chat bubble properly */
+        df-messenger::part(chat-bubble) {
+            background: #1e4a72 !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(30, 74, 114, 0.3) !important;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            df-messenger {
+                bottom: 10px !important;
+                right: 10px !important;
+                transform: scale(0.9);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .left-section,
+            .right-section {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-right {
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .left-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .right-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">🏛️ Mutual of Omaha Reverse Mortgage</a>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <span style="color: white; opacity: 0.8;">English</span>
+                    <a href="#" class="nav-link">About</a>
+                    <a href="#" class="nav-link">Contact Us</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <div class="left-section">
+            <h1>Start your application with Mutual of Omaha</h1>
+            
+            <h2>Just sign up to create an account, and you'll be ready to start your application!</h2>
+
+            <form id="applicationForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" value="" placeholder="your.email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone <span class="required">*</span></label>
+                    <div class="phone-input">
+                        <select class="country-code">
+                            <option value="+1">+1</option>
+                        </select>
+                        <input type="tel" id="phone" name="phone" class="phone-number" placeholder="123-456-7890" required>
+                    </div>
+                    <div class="phone-note">You can change your phone number after creating your account.</div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">
+                        I understand and agree with the <a href="#" target="_blank">Terms of Use</a>, 
+                        <a href="#" target="_blank">Privacy Policy</a>, 
+                        <a href="#" target="_blank">SMS Policy</a> and 
+                        <a href="#" target="_blank">eConsent Policy</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit</button>
+                <button type="button" class="back-btn" onclick="goBack()">Back</button>
+            </form>
+        </div>
+
+        <div class="right-section">
+            <h1>Meet Your Mutual of Omaha Team</h1>
+            
+            <div class="quote-section">
+                "We're here to help you unlock your home's potential and secure your retirement dreams."
+            </div>
+
+            <div class="loan-officers">
+                <div class="loan-officer">
+                    <div class="officer-photo">MR</div>
+                    <div class="officer-info">
+                        <h3>Michael Rodriguez</h3>
+                        <div class="title">Senior Loan Officer • NMLS #8765432</div>
+                        <div class="contact">
+                            📧 <a href="mailto:mrodriguez@mutualmortgage.com">mrodriguez@mutualmortgage.com</a><br>
+                            📞 <a href="tel:855-742-8901">(855) 742-8901</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loan-officer">
+                    <div class="officer-photo">JT</div>
+                    <div class="officer-info">
+                        <h3>Jennifer Thompson</h3>
+                        <div class="title">Reverse Mortgage Consultant</div>
+                        <div class="contact">
+                            📧 <a href="mailto:jthompson@mutualmortgage.com">jthompson@mutualmortgage.com</a><br>
+                            📞 <a href="tel:855-742-8902">(855) 742-8902</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Chat Interface -->
+    <div id="chat-widget" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99999;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    ">
+        <!-- Chat Button -->
+        <div id="chat-button" style="
+            width: 60px;
+            height: 60px;
+            background: #1e4a72;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30, 74, 114, 0.3);
+            transition: all 0.3s ease;
+        " onclick="toggleChat()">
+            💬
+        </div>
+
+        <!-- Chat Window -->
+        <div id="chat-window" style="
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        ">
+            <!-- Chat Header -->
+            <div style="
+                background: #1e4a72;
+                color: white;
+                padding: 15px;
+                font-weight: bold;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <span>Reverse Mortgage Assistant</span>
+                <span onclick="toggleChat()" style="cursor: pointer; font-size: 18px;">✕</span>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" style="
+                flex: 1;
+                padding: 20px;
+                overflow-y: auto;
+                background: #f3f6fc;
+            ">
+                <div style="
+                    background: white;
+                    padding: 15px;
+                    border-radius: 10px;
+                    margin-bottom: 15px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                ">
+                    Hello! I'm your Reverse Mortgage Assistant. I can help you with:
+                    <br><br>
+                    • Understanding reverse mortgages
+                    <br>• Checking eligibility requirements
+                    <br>• Estimating loan amounts
+                    <br>• Required documentation
+                    <br><br>
+                    How can I help you today?
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div style="
+                padding: 15px;
+                border-top: 1px solid #eee;
+                background: white;
+            ">
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="chat-input" placeholder="Type your message..." style="
+                        flex: 1;
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 20px;
+                        outline: none;
+                    " onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button onclick="sendMessage()" style="
+                        background: #1e4a72;
+                        color: white;
+                        border: none;
+                        padding: 10px 15px;
+                        border-radius: 20px;
+                        cursor: pointer;
+                    ">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chatOpen = false;
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            const chatButton = document.getElementById('chat-button');
+            
+            if (chatOpen) {
+                chatWindow.style.display = 'none';
+                chatButton.innerHTML = '💬';
+                chatOpen = false;
+            } else {
+                chatWindow.style.display = 'flex';
+                chatButton.innerHTML = '✕';
+                chatOpen = true;
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const messagesDiv = document.getElementById('chat-messages');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, true);
+            input.value = '';
+
+            // Simulate bot response
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, false);
+            }, 1000);
+        }
+
+        function addMessage(text, isUser) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            
+            messageDiv.style.cssText = `
+                background: ${isUser ? '#1e4a72' : 'white'};
+                color: ${isUser ? 'white' : '#333'};
+                padding: 12px 15px;
+                border-radius: 15px;
+                margin-bottom: 10px;
+                max-width: 80%;
+                margin-left: ${isUser ? 'auto' : '0'};
+                margin-right: ${isUser ? '0' : 'auto'};
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                word-wrap: break-word;
+            `;
+            
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function getBotResponse(message) {
+            const msg = message.toLowerCase();
+            
+            if (msg.includes('what is') && msg.includes('reverse mortgage')) {
+                return "A reverse mortgage is a loan available to homeowners 62 years or older that allows you to convert part of your home's equity into cash. Unlike a traditional mortgage, you don't make monthly payments. Instead, the loan is repaid when you sell the home, move out, or pass away.";
+            }
+            
+            if (msg.includes('eligible') || msg.includes('qualify')) {
+                return "To be eligible for a reverse mortgage, you must: 1) Be at least 62 years old, 2) Own your home outright or have a low mortgage balance, 3) Live in the home as your primary residence, and 4) Complete HUD-approved counseling.";
+            }
+            
+            if (msg.includes('how much') || msg.includes('amount')) {
+                return "The amount you can receive depends on your age, your home's current value, current interest rates, and any existing mortgage balance. Generally, you can access 40-60% of your home's value. For a more accurate estimate, I'd recommend speaking with one of our loan officers.";
+            }
+            
+            if (msg.includes('document') || msg.includes('paperwork')) {
+                return "For a reverse mortgage application, you'll typically need: Government-issued photo ID, Social Security card, proof of homeowner's insurance, property tax statements, existing mortgage statements (if any), and proof of income for financial assessment.";
+            }
+            
+            return "I'd be happy to help you with that! For more detailed information about reverse mortgages, I recommend speaking with one of our licensed loan officers. You can reach Michael Rodriguez at (855) 742-8901 or Jennifer Thompson at (855) 742-8902.";
+        }
+
+        // Close chat when clicking outside
+        document.addEventListener('click', function(event) {
+            const chatWidget = document.getElementById('chat-widget');
+            if (!chatWidget.contains(event.target) && chatOpen) {
+                toggleChat();
+            }
+        });
+    </script>
+
+    <script>
+        // ==========================================
+        // AUTH0 CONFIGURATION
+        // ==========================================
+        const AUTH0_DOMAIN = 'dev-33kbhhk62a0lfqfo.us.auth0.com';
+        const AUTH0_CLIENT_ID = 'sxrFfvn0PdC9z20kj6FIvb5kKeNOCp5Y';
+
+        // ==========================================
+        // IMMEDIATE AUTH0 CALLBACK CHECK
+        // ==========================================
+        // Check for Auth0 callback immediately when script loads
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
+            
+            if (code || error) {
+                // This is an Auth0 callback, process it immediately
+                handleAuth0CallbackImmediate();
+            }
+        })();
+
+        function handleAuth0CallbackImmediate() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
+            const errorDescription = urlParams.get('error_description');
+
+            if (error) {
+                showErrorPage(error, errorDescription);
+                return;
+            }
+
+            if (code) {
+                showLoadingPage();
+                
+                // Process the auth code after a short delay
+                setTimeout(() => {
+                    processAuthCode(code);
+                }, 1000);
+            }
+        }
+
+        function showLoadingPage() {
+            document.body.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+                        <div style="border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #1e4a72; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+                        <h2 style="color: #333; margin-bottom: 0.5rem;">Processing your login...</h2>
+                        <p style="color: #666;">Please wait while we prepare your application.</p>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                </div>
+            `;
+        }
+
+        function processAuthCode(code) {
+            // In production, exchange code for tokens and get real user data
+            // For now, we'll simulate this process
+            
+            // TODO: Replace with actual token exchange
+            // const tokenResponse = await fetch('/api/exchange-code', {
+            //     method: 'POST',
+            //     body: JSON.stringify({ code: code })
+            // });
+            // const tokens = await tokenResponse.json();
+            // const userInfo = await fetch('/api/userinfo', {
+            //     headers: { Authorization: `Bearer ${tokens.access_token}` }
+            // });
+            
+            // For demo - create mock user data with realistic Auth0 user ID format
+            const userData = {
+                id: 'auth0|' + Math.random().toString(36).substr(2, 24), // Realistic Auth0 user ID
+                name: 'John Doe',
+                email: 'john.doe@example.com',
+                picture: 'https://via.placeholder.com/100x100?text=JD',
+                loginTime: new Date().toLocaleString(),
+                authCode: code.substring(0, 10) + '...'
+            };
+
+            // Store user data
+            sessionStorage.setItem('userData', JSON.stringify(userData));
+
+            // Clean up URL and reload the page to show the form
+            window.history.replaceState({}, document.title, window.location.pathname);
+            
+            // Reload to show the form with clean URL
+            window.location.reload();
+        }
+
+        function showErrorPage(error, description) {
+            document.body.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                    <div style="background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; max-width: 500px;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                        <h2 style="color: #d32f2f; margin-bottom: 1rem;">Authentication Error</h2>
+                        <p style="color: #666; margin-bottom: 0.5rem;"><strong>Error:</strong> ${error}</p>
+                        ${description ? `<p style="color: #666; margin-bottom: 2rem;"><strong>Description:</strong> ${description}</p>` : ''}
+                        <div style="display: flex; gap: 1rem; justify-content: center;">
+                            <a href="index.html" style="background: #1e4a72; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">Return to Home</a>
+                            <button onclick="retryLogin()" style="background: #6c757d; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Try Again</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // FORM FUNCTIONALITY (runs after page reload)
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Only run form logic if we're not processing an Auth0 callback
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasAuthCallback = urlParams.get('code') || urlParams.get('error');
+            
+            if (!hasAuthCallback) {
+                initializeForm();
+            }
+        });
+
+        function initializeForm() {
+            // Pre-populate form with user data if available
+            const userData = sessionStorage.getItem('userData');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    const emailField = document.getElementById('email');
+                    const firstNameField = document.getElementById('firstName');
+                    const lastNameField = document.getElementById('lastName');
+                    
+                    if (emailField && user.email) {
+                        emailField.value = user.email;
+                    }
+                    
+                    if (user.name) {
+                        const names = user.name.split(' ');
+                        if (firstNameField && names.length >= 1) {
+                            firstNameField.value = names[0];
+                        }
+                        if (lastNameField && names.length >= 2) {
+                            lastNameField.value = names[names.length - 1];
+                        }
+                    }
+                } catch (e) {
+                    console.log('Could not parse user data');
+                }
+            }
+
+            // Form validation
+            const form = document.getElementById('applicationForm');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Validate age requirement
+                    const dobField = document.getElementById('dateOfBirth');
+                    if (dobField && dobField.value) {
+                        const birthDate = new Date(dobField.value);
+                        const today = new Date();
+                        const age = today.getFullYear() - birthDate.getFullYear();
+                        const monthDiff = today.getMonth() - birthDate.getMonth();
+                        
+                        // Adjust age if birthday hasn't occurred this year
+                        const actualAge = (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) 
+                            ? age - 1 : age;
+                        
+                        if (actualAge < 62) {
+                            alert('You must be at least 62 years old to qualify for a reverse mortgage.');
+                            return;
+                        }
+                    }
+                    
+                    // Validate terms checkbox
+                    if (!document.getElementById('terms').checked) {
+                        alert('Please agree to the terms and conditions to continue.');
+                        return;
+                    }
+                    
+                    // Collect form data
+                    const applicationData = {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        dateOfBirth: document.getElementById('dateOfBirth').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        submissionDate: new Date().toISOString(),
+                        status: 'submitted'
+                    };
+                    
+                    // Store application data locally
+                    sessionStorage.setItem('applicationData', JSON.stringify(applicationData));
+                    
+                    // Get user data for Auth0 user ID
+                    const userData = JSON.parse(sessionStorage.getItem('userData'));
+                    
+                    if (!userData || !userData.id) {
+                        alert('User session not found. Please log in again.');
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    
+                    // Submit to backend API
+                    try {
+                        // Show loading state
+                        const submitBtn = document.querySelector('.submit-btn');
+                        const originalText = submitBtn.textContent;
+                        submitBtn.textContent = 'Submitting...';
+                        submitBtn.disabled = true;
+                        
+                        // Replace with your actual backend URL
+                        // For local testing: 'http://localhost:3000/api/submit-application'
+                        // For production: 'https://your-deployed-api.vercel.app/api/submit-application'
+                        const API_URL = 'https://reverse-mortgage-backend.vercel.app/api/submit-application';
+                        
+                        const response = await fetch('https://reverse-mortgage-backend.vercel.app/api/submit-application', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                userId: userData.id, // Auth0 user ID
+                                applicationData: applicationData
+                            })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        // Reset button state
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        
+                        if (response.ok && result.success) {
+                            alert('Application submitted successfully! You will be contacted by one of our loan officers within 24 hours.');
+                            console.log('Application saved to Auth0:', result);
+                            
+                            // Redirect after successful submission
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 2000);
+                        } else {
+                            throw new Error(result.error || `Server error: ${response.status}`);
+                        }
+                        
+                    } catch (error) {
+                        // Reset button state on error
+                        const submitBtn = document.querySelector('.submit-btn');
+                        submitBtn.textContent = 'Submit';
+                        submitBtn.disabled = false;
+                        
+                        console.error('Submission error:', error);
+                        
+                        // Handle different types of errors
+                        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                            alert('Cannot connect to server. Please check if the backend API is running and try again.');
+                        } else if (error.message.includes('404')) {
+                            alert('API endpoint not found. Please check the backend configuration.');
+                        } else {
+                            alert('Error submitting application: ' + error.message + '. Please try again.');
+                        }
+                        return;
+                    }
+                });
+            }
+
+            // Phone number formatting
+            const phoneField = document.getElementById('phone');
+            if (phoneField) {
+                phoneField.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length >= 6) {
+                        value = value.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+                    } else if (value.length >= 3) {
+                        value = value.replace(/(\d{3})(\d{3})/, '$1-$2');
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            // Form validation for submit button
+            function validateForm() {
+                const form = document.getElementById('applicationForm');
+                const submitBtn = document.querySelector('.submit-btn');
+                const termsCheckbox = document.getElementById('terms');
+                
+                if (form && submitBtn && termsCheckbox) {
+                    const isValid = form.checkValidity() && termsCheckbox.checked;
+                    submitBtn.disabled = !isValid;
+                }
+            }
+
+            // Add event listeners to form inputs
+            document.querySelectorAll('#applicationForm input').forEach(input => {
+                input.addEventListener('input', validateForm);
+                input.addEventListener('change', validateForm);
+            });
+
+            validateForm();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function showLogin() {
+            window.location.href = 'index.html';
+        }
+
+        function retryLogin() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
