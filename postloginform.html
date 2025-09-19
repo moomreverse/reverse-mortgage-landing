@@ -670,26 +670,225 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
+        let chatState = {
+            currentFlow: null,
+            userInfo: {
+                age: null,
+                homeValue: null,
+                mortgageBalance: null,
+                primaryResidence: null,
+                state: null
+            },
+            step: 0
+        };
+
         function getBotResponse(message) {
             const msg = message.toLowerCase();
             
+            // Handle eligibility check flow
+            if (chatState.currentFlow === 'eligibility') {
+                return handleEligibilityFlow(message);
+            }
+            
+            // Handle loan amount estimation flow
+            if (chatState.currentFlow === 'loanAmount') {
+                return handleLoanAmountFlow(message);
+            }
+            
+            // Check if user wants eligibility check
+            if (msg.includes('eligible') || msg.includes('qualify') || (msg.includes('check') && (msg.includes('eligibility') || msg.includes('qualify')))) {
+                chatState.currentFlow = 'eligibility';
+                chatState.step = 0;
+                return "I'll help you check your eligibility for a reverse mortgage. Let me ask you a few questions:\n\nFirst, what is your age? (You must be at least 62 years old)";
+            }
+            
+            // Check if user wants loan amount estimate
+            if (msg.includes('how much') || msg.includes('amount') || msg.includes('estimate') || msg.includes('calculate')) {
+                chatState.currentFlow = 'loanAmount';
+                chatState.step = 0;
+                return "I'll help estimate how much you might be able to borrow. Let me gather some information:\n\nFirst, what is your age?";
+            }
+            
+            // Basic reverse mortgage questions
             if (msg.includes('what is') && msg.includes('reverse mortgage')) {
-                return "A reverse mortgage is a loan available to homeowners 62 years or older that allows you to convert part of your home's equity into cash. Unlike a traditional mortgage, you don't make monthly payments. Instead, the loan is repaid when you sell the home, move out, or pass away.";
+                return "A reverse mortgage is a loan available to homeowners 62 years or older that allows you to convert part of your home's equity into cash. Unlike a traditional mortgage, you don't make monthly payments. Instead, the loan is repaid when you sell the home, move out, or pass away.\n\nWould you like me to check if you're eligible or estimate how much you might qualify for?";
             }
             
-            if (msg.includes('eligible') || msg.includes('qualify')) {
-                return "To be eligible for a reverse mortgage, you must: 1) Be at least 62 years old, 2) Own your home outright or have a low mortgage balance, 3) Live in the home as your primary residence, and 4) Complete HUD-approved counseling.";
+            if (msg.includes('how') && msg.includes('work')) {
+                return "A reverse mortgage works by allowing you to borrow against your home's equity. You receive money (lump sum, monthly payments, or line of credit) while continuing to live in your home. The loan becomes due when you sell, move out permanently, or pass away. No monthly mortgage payments are required.\n\nWould you like to check your eligibility?";
             }
             
-            if (msg.includes('how much') || msg.includes('amount')) {
-                return "The amount you can receive depends on your age, your home's current value, current interest rates, and any existing mortgage balance. Generally, you can access 40-60% of your home's value. For a more accurate estimate, I'd recommend speaking with one of our loan officers.";
+            // Other questions remain the same but add call-to-action
+            if (msg.includes('requirements')) {
+                return "Basic requirements for a reverse mortgage: 1) Be at least 62 years old, 2) Own your home outright or have a low mortgage balance, 3) Live in the home as your primary residence, 4) Have sufficient financial resources for taxes/insurance, 5) Complete HUD-approved counseling.\n\nWould you like me to check if you meet these requirements?";
             }
             
-            if (msg.includes('document') || msg.includes('paperwork')) {
-                return "For a reverse mortgage application, you'll typically need: Government-issued photo ID, Social Security card, proof of homeowner's insurance, property tax statements, existing mortgage statements (if any), and proof of income for financial assessment.";
+            if (msg.includes('process') || msg.includes('apply') || msg.includes('application')) {
+                return "The reverse mortgage process: 1) HUD counseling (required), 2) Application and documentation, 3) Home appraisal, 4) Financial assessment, 5) Underwriting review, 6) Closing. The entire process typically takes 30-45 days.\n\nWould you like to check your eligibility first?";
             }
             
-            return "I'd be happy to help you with that! For more detailed information about reverse mortgages, I recommend speaking with one of our licensed loan officers. You can reach Michael Rodriguez at (855) 742-8901 or Jennifer Thompson at (855) 742-8902.";
+            if (msg.includes('document') || msg.includes('paperwork') || msg.includes('need')) {
+                return "Required documents typically include: Government-issued photo ID, Social Security card, proof of homeowners insurance, property tax statements, existing mortgage statements (if any), proof of income for financial assessment, and property deed.\n\nWould you like to check if you're eligible before gathering documents?";
+            }
+            
+            // Greetings
+            if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+                return "Hello! I'm here to help you understand reverse mortgages. I can:\n\n• Check your eligibility\n• Estimate loan amounts\n• Explain how reverse mortgages work\n• Answer questions about the process\n\nWhat would you like to know?";
+            }
+            
+            // Default response with options
+            return "I can help you with reverse mortgages! I can:\n\n• Check if you're eligible\n• Estimate how much you might qualify for\n• Explain how reverse mortgages work\n• Answer questions about requirements and process\n\nWhat would you like me to help you with?";
+        }
+
+        function handleEligibilityFlow(message) {
+            const msg = message.toLowerCase();
+            
+            switch(chatState.step) {
+                case 0: // Getting age
+                    const age = parseInt(message);
+                    if (age && age > 0) {
+                        chatState.userInfo.age = age;
+                        if (age < 62) {
+                            chatState.currentFlow = null;
+                            return "Unfortunately, you must be at least 62 years old to qualify for a reverse mortgage. You'll need to wait until you reach 62.\n\nIs there anything else I can help you with about reverse mortgages?";
+                        }
+                        chatState.step = 1;
+                        return "Great! At " + age + ", you meet the age requirement.\n\nNext, what is the approximate current value of your home?";
+                    }
+                    return "Please enter your age as a number. You must be at least 62 years old to qualify.";
+                
+                case 1: // Getting home value
+                    const homeValue = parseFloat(message.replace(/[,$]/g, ''));
+                    if (homeValue && homeValue > 0) {
+                        chatState.userInfo.homeValue = homeValue;
+                        chatState.step = 2;
+                        return "Thank you. Your home is valued at approximately $" + homeValue.toLocaleString() + ".\n\nDo you currently have a mortgage on this home? If yes, what's the approximate remaining balance? If no, just type 'no' or '0'.";
+                    }
+                    return "Please enter your home's approximate value as a number (e.g., 300000 or 300,000).";
+                
+                case 2: // Getting mortgage balance
+                    let mortgageBalance = 0;
+                    if (!msg.includes('no') && !msg.includes('none')) {
+                        mortgageBalance = parseFloat(message.replace(/[,$]/g, '')) || 0;
+                    }
+                    chatState.userInfo.mortgageBalance = mortgageBalance;
+                    chatState.step = 3;
+                    return "Got it. Your remaining mortgage balance is $" + mortgageBalance.toLocaleString() + ".\n\nIs this your primary residence where you live most of the year? (yes/no)";
+                
+                case 3: // Getting primary residence status
+                    if (msg.includes('yes') || msg.includes('y')) {
+                        chatState.userInfo.primaryResidence = true;
+                        chatState.step = 4;
+                        return "Perfect! This is your primary residence.\n\nWhat state is your home located in?";
+                    } else if (msg.includes('no') || msg.includes('n')) {
+                        chatState.currentFlow = null;
+                        return "Unfortunately, reverse mortgages are only available for primary residences where you live most of the year. Investment properties and vacation homes don't qualify.\n\nIs there anything else I can help you with?";
+                    }
+                    return "Please answer yes or no - is this your primary residence where you live most of the year?";
+                
+                case 4: // Getting state and providing final assessment
+                    chatState.userInfo.state = message;
+                    const assessment = generateEligibilityAssessment();
+                    chatState.currentFlow = null;
+                    return assessment;
+            }
+        }
+
+        function handleLoanAmountFlow(message) {
+            // Similar flow but focused on loan amount estimation
+            switch(chatState.step) {
+                case 0: // Getting age
+                    const age = parseInt(message);
+                    if (age && age >= 62) {
+                        chatState.userInfo.age = age;
+                        chatState.step = 1;
+                        return "Thank you. At age " + age + ", you're eligible.\n\nWhat is the approximate current value of your home?";
+                    } else if (age && age < 62) {
+                        chatState.currentFlow = null;
+                        return "You must be at least 62 to qualify for a reverse mortgage.\n\nIs there anything else I can help you with?";
+                    }
+                    return "Please enter your age as a number.";
+                
+                case 1: // Getting home value
+                    const homeValue = parseFloat(message.replace(/[,$]/g, ''));
+                    if (homeValue && homeValue > 0) {
+                        chatState.userInfo.homeValue = homeValue;
+                        chatState.step = 2;
+                        return "Your home value: $" + homeValue.toLocaleString() + ".\n\nWhat's your current mortgage balance? (Enter 0 if paid off)";
+                    }
+                    return "Please enter your home's value as a number.";
+                
+                case 2: // Getting mortgage balance and calculating
+                    const mortgageBalance = parseFloat(message.replace(/[,$]/g, '')) || 0;
+                    chatState.userInfo.mortgageBalance = mortgageBalance;
+                    const estimate = calculateLoanEstimate();
+                    chatState.currentFlow = null;
+                    return estimate;
+            }
+        }
+
+        function generateEligibilityAssessment() {
+            const { age, homeValue, mortgageBalance, primaryResidence } = chatState.userInfo;
+            const equity = homeValue - mortgageBalance;
+            const equityPercentage = (equity / homeValue) * 100;
+            
+            let assessment = "📋 **ELIGIBILITY ASSESSMENT RESULTS**\n\n";
+            assessment += "✅ Age: " + age + " (Qualified - 62+)\n";
+            assessment += "✅ Primary Residence: Yes\n";
+            assessment += "✅ Home Value: $" + homeValue.toLocaleString() + "\n";
+            assessment += "✅ Mortgage Balance: $" + mortgageBalance.toLocaleString() + "\n";
+            assessment += "✅ Available Equity: $" + equity.toLocaleString() + "\n\n";
+            
+            if (equityPercentage >= 50) {
+                assessment += "🎉 **CONGRATULATIONS!** You appear to meet the basic eligibility requirements for a reverse mortgage.\n\n";
+                assessment += "💰 **Estimated Access:** Based on your age and home value, you might access approximately $" + Math.floor(equity * 0.4).toLocaleString() + " - $" + Math.floor(equity * 0.6).toLocaleString() + ".\n\n";
+            } else {
+                assessment += "⚠️ **POTENTIAL CONCERN:** Your current mortgage balance is quite high relative to your home value. You may still qualify, but the available funds would be limited.\n\n";
+            }
+            
+            assessment += "📞 **NEXT STEPS:**\n";
+            assessment += "1. Schedule HUD counseling (required)\n";
+            assessment += "2. Contact our loan officers for detailed calculations\n";
+            assessment += "3. Get a formal appraisal\n\n";
+            assessment += "Call Michael Rodriguez at (855) 742-8901 or Jennifer Thompson at (855) 742-8902 for a detailed consultation.\n\n";
+            assessment += "Would you like information about the application process or have other questions?";
+            
+            return assessment;
+        }
+
+        function calculateLoanEstimate() {
+            const { age, homeValue, mortgageBalance } = chatState.userInfo;
+            const equity = homeValue - mortgageBalance;
+            
+            // Simplified calculation based on age
+            let accessPercentage = 0.35; // Base percentage
+            if (age >= 70) accessPercentage = 0.45;
+            if (age >= 75) accessPercentage = 0.55;
+            if (age >= 80) accessPercentage = 0.60;
+            
+            const estimatedAccess = Math.floor(homeValue * accessPercentage) - mortgageBalance;
+            
+            let result = "💰 **LOAN AMOUNT ESTIMATE**\n\n";
+            result += "🏠 Home Value: $" + homeValue.toLocaleString() + "\n";
+            result += "📊 Current Mortgage: $" + mortgageBalance.toLocaleString() + "\n";
+            result += "👤 Your Age: " + age + "\n";
+            result += "📈 Access Percentage: ~" + Math.round(accessPercentage * 100) + "%\n\n";
+            
+            if (estimatedAccess > 0) {
+                result += "💵 **Estimated Available Funds: $" + estimatedAccess.toLocaleString() + "**\n\n";
+                result += "This estimate is based on current age and home value. Actual amounts depend on:\n";
+                result += "• Current interest rates\n• Property type and condition\n• Financial assessment\n• Closing costs\n\n";
+            } else {
+                result += "❌ **Limited Funds Available**\n\n";
+                result += "Your current mortgage balance is too high relative to your home value for a beneficial reverse mortgage at this time.\n\n";
+            }
+            
+            result += "📞 For accurate calculations, contact our licensed loan officers:\n";
+            result += "Michael Rodriguez: (855) 742-8901\n";
+            result += "Jennifer Thompson: (855) 742-8902\n\n";
+            result += "Would you like to check eligibility requirements or learn about the application process?";
+            
+            return result;
         }
 
         // Close chat when clicking outside
