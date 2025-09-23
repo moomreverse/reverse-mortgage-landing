@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI ChatBot MooM</title>
+  <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+  <style>
+    body {
+      margin: 0;
+    }
+    df-messenger {
+      z-index: 99999;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      --df-messenger-font-color: #000;
+      --df-messenger-font-family: Arial, sans-serif;
+      --df-messenger-chat-background: #f3f6fc;
+      --df-messenger-message-user-background: #1e4a72;
+      --df-messenger-message-bot-background: #fff;
+      --df-messenger-button-titlebar-color: #1e4a72;
+      --df-messenger-chat-bubble-background: #1e4a72;
+    }
+  </style>
+</head>
+<body>
+  <df-messenger
+    location="us-central1"
+    project-id="ai-chatbot-moom"
+    agent-id="8de0fc4c-e958-4724-adf1-b2745134c582"
+    language-code="en">
+    <df-messenger-chat-bubble chat-title="AI ChatBot MooM"></df-messenger-chat-bubble>
+  </df-messenger>
+</body>
+</html>
